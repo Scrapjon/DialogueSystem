@@ -5,15 +5,17 @@
 int main()
 {
 
-    std::shared_ptr<DialogueNode> start = MakeNode("Hello! Welcome to my game!", "Start");
+    std::shared_ptr<DialogueNode> start = DialogueNode::MakeNode("Hello! Welcome to my game!", "Start");
 
     start
         ->Extend("This is my custom dialogue system, I am testing out how the system works!")
         ->Extend("This implementation looks kinda strange rn but bear with me")
-        ->Extend("Do you like it?", {{"Yes", MakeNode("Great! I'm glad you do!")}, {"No", MakeNode("Sleep with one eye open...", "Threaten")}})
+        ->Extend("Do you like it?", {{"Yes",
+                                      DialogueNode::MakeNode("Great! I'm glad you do!")},
+                                     {"No", DialogueNode::MakeNode("Sleep with one eye open...", "Threaten")}})
         ->GetNext("Yes")
-        ->Extend("If you like this so much, would you like to play again?", {{"Yes", GetNode("Start")},
-                                                                             {"No", GetNode("Threaten")}});
+        ->Extend("If you like this so much, would you like to play again?", {{"Yes", DialogueNode::GetNode("Start")},
+                                                                             {"No", DialogueNode::GetNode("Threaten")}});
 
     std::shared_ptr<DialogueNode> current = start;
 

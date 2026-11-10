@@ -3,11 +3,9 @@
 #include <memory>
 #include <string>
 #include <tuple>
-#include <type_traits>
 #include <optional>
-#include <iostream>
 
-struct DialogueNode
+struct DialogueNode : public std::enable_shared_from_this<DialogueNode>
 {
     using ChoiceMap = std::map<std::string, std::shared_ptr<DialogueNode>>;
     using ChoicePair = std::pair<std::string, std::shared_ptr<DialogueNode>>;
@@ -28,6 +26,16 @@ struct DialogueNode
         std::shared_ptr<DialogueNode> next;
     };
 
+    static std::shared_ptr<DialogueNode> MakeNode(const std::string &text, const std::optional<std::string> &node_name = std::nullopt);
+
+    static std::shared_ptr<DialogueNode> MakeNode(const std::string &text, const std::initializer_list<DialogueNode::ChoicePair> &choices, const std::optional<std::string> &node_name = std::nullopt);
+
+    static std::shared_ptr<DialogueNode> MakeNode(const std::string &text, const DialogueNode::ChoiceMap &choices, const std::optional<std::string> &node_name = std::nullopt);
+
+    static std::shared_ptr<DialogueNode> GetNode(const std::string &name);
+
+    // TODO: Look into enforcing use of MakeNode factory rather than constructor
+
     // Text Node Contructor
     DialogueNode(const std::string &text, const std::optional<std::string> &node_name = std::nullopt);
 
@@ -37,6 +45,7 @@ struct DialogueNode
     DialogueNode(const std::string &text, const ChoiceMap &choices, const std::optional<std::string> &node_name = std::nullopt);
     ~DialogueNode();
 
+public:
     std::string text;
 
     NodeData data;
@@ -56,13 +65,5 @@ private:
     const NodeType m_node_type;
     static unsigned int m_node_id; // Only increments for anonymous nodes
 };
-
-std::shared_ptr<DialogueNode> MakeNode(const std::string &text, const std::optional<std::string> &node_name = std::nullopt);
-
-std::shared_ptr<DialogueNode> MakeNode(const std::string &text, const std::initializer_list<DialogueNode::ChoicePair> &choices, const std::optional<std::string> &node_name = std::nullopt);
-
-std::shared_ptr<DialogueNode> MakeNode(const std::string &text, const DialogueNode::ChoiceMap &choices, const std::optional<std::string> &node_name = std::nullopt);
-
-std::shared_ptr<DialogueNode> GetNode(const std::string &name);
 
 static std::map<std::string, std::shared_ptr<DialogueNode>> nodes = {};
