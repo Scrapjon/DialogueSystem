@@ -60,10 +60,14 @@ public:
 
     std::shared_ptr<DialogueNode> Extend(const std::string &text, const std::optional<std::string> &node_name = std::nullopt);
     std::shared_ptr<DialogueNode> Extend(const std::string &text, const std::initializer_list<ChoicePair> &choices, const std::optional<std::string> &node_name = std::nullopt);
+    std::shared_ptr<DialogueNode> Link(const std::string name);
+    std::shared_ptr<DialogueNode> Link(const std::shared_ptr<DialogueNode> other);
+    static std::shared_ptr<DialogueNode> Link(const std::string name1, const std::string &name2);
+    static std::shared_ptr<DialogueNode> Link(const std::shared_ptr<DialogueNode> node1, const std::shared_ptr<DialogueNode> node2);
 
 private:
     const NodeType m_node_type;
     static unsigned int m_node_id; // Only increments for anonymous nodes
 };
 
-static std::map<std::string, std::shared_ptr<DialogueNode>> nodes = {};
+inline static std::map<std::string, std::shared_ptr<DialogueNode>> nodes = {};

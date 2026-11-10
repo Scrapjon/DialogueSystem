@@ -92,6 +92,33 @@ std::shared_ptr<DialogueNode> DialogueNode::Extend(const std::string &text, cons
     return data.next;
 }
 
+std::shared_ptr<DialogueNode> DialogueNode::Link(const std::string name)
+{
+    assert(m_node_type == TEXT && "Attempted to link non-text node");
+    data.next = GetNode(name);
+    return data.next;
+}
+
+std::shared_ptr<DialogueNode> DialogueNode::Link(const std::shared_ptr<DialogueNode> other)
+{
+    assert(m_node_type == TEXT && "Attempted to link non-text node");
+    data.next = other;
+    return data.next;
+}
+
+std::shared_ptr<DialogueNode> DialogueNode::Link(const std::string name1, const std::string &name2)
+{
+    std::shared_ptr<DialogueNode> node1 = GetNode(name1), node2 = GetNode(name2);
+    assert(node1->m_node_type == TEXT && node2->m_node_type == TEXT && "Attempted to link non-text node");
+    return node1->Link(node2);
+}
+
+std::shared_ptr<DialogueNode> DialogueNode::Link(const std::shared_ptr<DialogueNode> node1, const std::shared_ptr<DialogueNode> node2)
+{
+    assert(node1->m_node_type == TEXT && node2->m_node_type == TEXT && "Attempted to link non-text node");
+    return node1->Link(node2);
+}
+
 std::shared_ptr<DialogueNode> DialogueNode::MakeNode(const std::string &text, const std::optional<std::string> &node_name)
 {
     std::shared_ptr<DialogueNode> node = std::make_shared<DialogueNode>(text, node_name);
