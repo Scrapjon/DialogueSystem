@@ -45,6 +45,9 @@ struct DialogueNode : public std::enable_shared_from_this<DialogueNode>
     DialogueNode(const std::string &text, const ChoiceMap &choices, const std::optional<std::string> &node_name = std::nullopt);
     ~DialogueNode();
 
+private:
+    const NodeType m_node_type;
+
 public:
     std::string text;
 
@@ -66,7 +69,6 @@ public:
     static std::shared_ptr<DialogueNode> Link(const std::shared_ptr<DialogueNode> node1, const std::shared_ptr<DialogueNode> node2);
 
 private:
-    const NodeType m_node_type;
     static unsigned int m_node_id; // Only increments for anonymous nodes
 };
 

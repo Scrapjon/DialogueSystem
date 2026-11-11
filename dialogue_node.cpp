@@ -42,7 +42,6 @@ DialogueNode::~DialogueNode()
 std::string DialogueNode::ParseNode() const
 {
     std::string options = "";
-    unsigned int i = 0;
     switch (m_node_type)
     {
     case TEXT:
